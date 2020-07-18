@@ -1,0 +1,7 @@
+useDynLib(modernVA, .registration = TRUE)
+
+importFrom("stats", "lm", "quantile")
+
+export(tdVA)
+export(qVA)
+
