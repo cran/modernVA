@@ -15,6 +15,7 @@
 
 #include <R_ext/Lapack.h>
 #include <R.h>
+#include <Rinternals.h>
 #include <Rmath.h>
 
 #include <stdio.h>

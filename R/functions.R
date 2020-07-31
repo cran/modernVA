@@ -1,15 +1,4 @@
 
-# HPD calculator (see TeachingDemos)
-emp.hpd <- function(x, conf=0.95){
-  conf <- min(conf, 1-conf)
-  n <- length(x)
-  nn <- round( n*conf )
-	x <- sort(x)
-	xx <- x[ (n-nn+1):n ] - x[1:nn]
-	m <- min(xx)
-	nnn <- which(xx==m)[1]
-	return( c( x[ nnn ], x[ n-nn+nnn ] ) )
-}
 
 # Wrapper function that access C-code that fits the quantile value-added model
 
@@ -245,6 +234,17 @@ tdVA <- function(y1,xmat1,y2,xmat2,school1,school2,groupID=NULL,model=0,
 		out$waic <- C.out$waic.out
 
 
+   # HPD calculator (see TeachingDemos)
+   emp.hpd <- function(x, conf=0.95){
+     conf <- min(conf, 1-conf)
+     n <- length(x)
+     nn <- round( n*conf )
+	   x <- sort(x)
+	   xx <- x[ (n-nn+1):n ] - x[1:nn]
+	   m <- min(xx)
+	   nnn <- which(xx==m)[1]
+	   return( c( x[ nnn ], x[ n-nn+nnn ] ) )
+   }
 
 
     groupIDt <- groupID
