@@ -2,7 +2,7 @@ Package: modernVA
 Type: Package
 Title: An Implementation of Two Modern Education-Based Value-Added
         Models
-Version: 0.1.1
+Version: 0.1.2
 Authors@R: c(
   person(given = "Garritt", family = "L. Page", email = "page@stat.byu.edu", role = c("aut", "cre", "cph")),
 	person(given = "S. McKay", family = "Curtis", email = "s.mckay.curtis@gmail.com", role = c("ctb", "cph")),
@@ -26,12 +26,11 @@ Description: Provides functions that fit two modern education-based value-added 
                  model is also an option.
 License: GPL
 Encoding: UTF-8
-LazyData: true
 RoxygenNote: 7.1.0
 NeedsCompilation: yes
-Packaged: 2020-07-24 23:05:36 UTC; gpage
+Packaged: 2023-04-03 16:49:48 UTC; gpage
 Author: Garritt L. Page [aut, cre, cph],
   S. McKay Curtis [ctb, cph],
   Radford M. Neal [ctb, cph]
 Repository: CRAN
-Date/Publication: 2020-07-31 08:50:02 UTC
+Date/Publication: 2023-04-03 17:00:02 UTC
