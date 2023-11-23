@@ -340,7 +340,7 @@ void mcmcloopM2a2(int *draws, int *burn, int *thin, int *nobsi1, int *nobsi2,
 		// Update gamma.  quality of school parameter
 		//
 		//////////////////////////////////////////////////////////////////////////////////
-		if(*model == 2){
+		if((*model == 2) | (*model==3)){
 
 			phi1sq = phi1_iter*phi1_iter;
 
@@ -360,7 +360,6 @@ void mcmcloopM2a2(int *draws, int *burn, int *thin, int *nobsi1, int *nobsi2,
 			gamma_iter = rnorm(mstar, sqrt(s2star));
 
 		}
-
 //		Rprintf("gamma_iter = %f\n", gamma_iter);
 
 
@@ -369,7 +368,7 @@ void mcmcloopM2a2(int *draws, int *burn, int *thin, int *nobsi1, int *nobsi2,
 		// Update phi1.  time dependence parameter
 		//
 		//////////////////////////////////////////////////////////////////////////////////
-		if(*model == 1){
+		if((*model == 1) | (*model==3)){
 
 			phio = phi1_iter;
 			phin = rnorm(phio, csigPHI1);
@@ -521,55 +520,55 @@ void mcmcloopM2a2(int *draws, int *burn, int *thin, int *nobsi1, int *nobsi2,
 
     //////////////////////////////////////////////////////////////////////////////////
     //
-		// update sig21 and sig22 at the same time.
-		//
-		//////////////////////////////////////////////////////////////////////////////////
+	// update sig21 and sig22 at the same time.
+	//
+	//////////////////////////////////////////////////////////////////////////////////
 
 
     for(j = 0; j<*nschool; j++){
-		  a2_1 = nobsi1[j]*alpha1_iter[j]*alpha1_iter[j];
-		  asy_1 = nobsi1[j]*ybari_1[j]*alpha1_iter[j];
+      a2_1 = nobsi1[j]*alpha1_iter[j]*alpha1_iter[j];
+      asy_1 = nobsi1[j]*ybari_1[j]*alpha1_iter[j];
 
-		  a2_2 = nobsi2[j]*alpha2_iter[j]*alpha2_iter[j];
-		  asy_2 = nobsi2[j]*ybari_2[j]*alpha2_iter[j];
+      a2_2 = nobsi2[j]*alpha2_iter[j]*alpha2_iter[j];
+      asy_2 = nobsi2[j]*ybari_2[j]*alpha2_iter[j];
 
-		  asxb_1 =0.0, asxb_2=0.0;
-		  for(k=0; k< *ncov; k++){
-		    asxb_1 = asxb_1 + nobsi1[j]*xbari_1[j*(*ncov)+k]*alpha1_iter[j]*beta1_iter[k];
-		    asxb_2 = asxb_2 + nobsi2[j]*xbari_2[j*(*ncov)+k]*alpha2_iter[j]*beta2_iter[k];
-		  }
-		  syxb_1=0.0, syxb_2=0.0;
-		  bxxb_1=0.0, bxxb_2=0.0;
-		  for(k=0; k<*ncov; k++){
-		    syxb_1 = syxb_1 + sY1X1[j*(*ncov) + k]*beta1_iter[k];
-		    syxb_2 = syxb_2 + sY2X2[j*(*ncov) + k]*beta2_iter[k];
-		    for(kk=0; kk<*ncov; kk++){
-		      bxxb_1 = bxxb_1 + beta1_iter[k]*tX1X1[j*(*ncov)*(*ncov) + k*(*ncov) + kk]*beta1_iter[kk];
-		      bxxb_2 = bxxb_2 + beta2_iter[k]*tX2X2[j*(*ncov)*(*ncov) + k*(*ncov) + kk]*beta2_iter[kk];
-		    }
-		  }
+      asxb_1 =0.0, asxb_2=0.0;
+      for(k=0; k< *ncov; k++){
+        asxb_1 = asxb_1 + nobsi1[j]*xbari_1[j*(*ncov)+k]*alpha1_iter[j]*beta1_iter[k];
+        asxb_2 = asxb_2 + nobsi2[j]*xbari_2[j*(*ncov)+k]*alpha2_iter[j]*beta2_iter[k];
+      }
+      syxb_1=0.0, syxb_2=0.0;
+      bxxb_1=0.0, bxxb_2=0.0;
+      for(k=0; k<*ncov; k++){
+        syxb_1 = syxb_1 + sY1X1[j*(*ncov) + k]*beta1_iter[k];
+        syxb_2 = syxb_2 + sY2X2[j*(*ncov) + k]*beta2_iter[k];
+        for(kk=0; kk<*ncov; kk++){
+          bxxb_1 = bxxb_1 + beta1_iter[k]*tX1X1[j*(*ncov)*(*ncov) + k*(*ncov) + kk]*beta1_iter[kk];
+          bxxb_2 = bxxb_2 + beta2_iter[k]*tX2X2[j*(*ncov)*(*ncov) + k*(*ncov) + kk]*beta2_iter[kk];
+        }
+      }
 
-		  ssq1 = y2_1[j] + bxxb_1 + a2_1 - 2*asy_1 - 2*syxb_1 + 2*asxb_1;
-		  ssq2 = y2_2[j] + bxxb_2 + a2_2 - 2*asy_2 - 2*syxb_2 + 2*asxb_2;
+      ssq1 = y2_1[j] + bxxb_1 + a2_1 - 2*asy_1 - 2*syxb_1 + 2*asxb_1;
+      ssq2 = y2_2[j] + bxxb_2 + a2_2 - 2*asy_2 - 2*syxb_2 + 2*asxb_2;
 
 
-		  astar = as + 0.5*(nobsi1[j]);
-		  bstar = 0.5*ssq1 + 1/bs;
+      astar = as + 0.5*(nobsi1[j]);
+      bstar = 0.5*ssq1 + 1/bs;
 
 //      Rprintf("astar = %f\n", astar);
 //      Rprintf("bstar = %f\n", bstar);
 
-		  sig21_iter[j] = 1/rgamma(astar, 1/bstar);
+      sig21_iter[j] = 1/rgamma(astar, 1/bstar);
 
 
-		  astar = as + 0.5*(nobsi2[j]);
-		  bstar = 0.5*ssq2 + 1/bs;
+      astar = as + 0.5*(nobsi2[j]);
+      bstar = 0.5*ssq2 + 1/bs;
 
-//			Rprintf("astar = %f\n", astar);
-//			Rprintf("bstar = %f\n", bstar);
+//      Rprintf("astar = %f\n", astar);
+//      Rprintf("bstar = %f\n", bstar);
 
 
-		  sig22_iter[j] = 1/rgamma(astar, 1/bstar);
+      sig22_iter[j] = 1/rgamma(astar, 1/bstar);
     }
 
     //////////////////////////////////////////////////////////////////////////////////

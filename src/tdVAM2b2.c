@@ -342,7 +342,7 @@ void mcmcloopM2b2(int *draws, int *burn, int *thin, int *nobsi1, int *nobsi2,
 		// Update gamma.  quality of school parameter
 		//
 		//////////////////////////////////////////////////////////////////////////////////
-		if(*model == 2){
+		if((*model == 2) | (*model==3)){
 			for(c = 0; c < *ngroup; c++){
 
 				phi1sq = phi1_iter[c]*phi1_iter[c];
@@ -374,7 +374,7 @@ void mcmcloopM2b2(int *draws, int *burn, int *thin, int *nobsi1, int *nobsi2,
 		// Update phi1.  time dependence parameter
 		//
 		//////////////////////////////////////////////////////////////////////////////////
-		if(*model == 1){
+		if((*model == 1) | (*model==3)){
 			for(c = 0; c < (*ngroup); c++){
 				phio = phi1_iter[c];
 				phin = rnorm(phio, csigPHI1);

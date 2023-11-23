@@ -42,7 +42,9 @@ tdVA(y1, xmat1,
 
               1 - Temporally dependent school effects between two cohorts based on a non-statinary AR(1) process,
 
-              2 - Temporally dependent school effects based on previous cohorts post-test performance. }
+              2 - Temporally dependent school effects based on previous cohorts post-test performance.
+
+              3 - Full model that includes both an AR(1) type correlation and one based on previous cohorts post-test performance.}
 
 \item{priors}{Vector of prior distribution parameter values.
 
@@ -58,9 +60,9 @@ tdVA(y1, xmat1,
 
   bs - prior rate for sigma2, default is 1.
 
-  mg - prior mean for gamma, default is 0.  (only used if model = 2)
+  mg - prior mean for gamma2, default is 0.  (only used if model = 2)
 
-  s2g - prior variance for gamma, default is 100^2.   (only used if model = 2)
+  s2g - prior variance for gamma2, default is 100^2.   (only used if model = 2)
 
   lp12 - prior lower bound for for phi12, default is -1.  (only used if model = 1)
 

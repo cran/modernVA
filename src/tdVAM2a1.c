@@ -43,9 +43,10 @@
 * priors = vector containing prior parameter values
 * 			mub, s2b, at, bt, as, bs, mp, sp, mg, sg, 1p1, up1
 * model = scalar indicating which model to use
-* 		0 - Model0, phi1 = phi0 = gamma = 0
+*       0 - model0, independent
 * 		1 - Model1, gamma = 0
-*     2 - Model2, no parameters are equal to 0
+* 		2 - Model2, phi12 = 0
+*       3 - Model3, no parameters are equal to 0
 *
 *
 * Output
@@ -338,7 +339,7 @@ void mcmcloopM2a1(int *draws, int *burn, int *thin, int *nobsi1, int *nobsi2,
 		// Update gamma.  quality of school parameter
 		//
 		//////////////////////////////////////////////////////////////////////////////////
-		if(*model == 2){
+		if((*model == 2) | (*model==3)){
 
 			phi1sq = phi1_iter*phi1_iter;
 
@@ -367,7 +368,7 @@ void mcmcloopM2a1(int *draws, int *burn, int *thin, int *nobsi1, int *nobsi2,
 		// Update phi1.  time dependence parameter
 		//
 		//////////////////////////////////////////////////////////////////////////////////
-		if(*model == 1){
+		if((*model == 1) | (*model==3)){
 
 			phio = phi1_iter;
 			phin = rnorm(phio, csigPHI1);

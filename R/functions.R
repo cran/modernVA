@@ -225,11 +225,11 @@ tdVA <- function(y1,xmat1,y2,xmat2,school1,school2,groupID=NULL,model=0,
 		out$sig21 <- matrix(C.out$sig21.out, nrow=nout, byrow=TRUE)
 		out$sig22 <- matrix(C.out$sig22.out, nrow=nout, byrow=TRUE)
 		out$phi02 <- matrix(C.out$phi02.out, nrow=nout, byrow=TRUE)
-		if(model==1) out$phi12 <- matrix(C.out$phi12.out, nrow=nout, byrow=TRUE)
+		if(model==1|model==3) out$phi12 <- matrix(C.out$phi12.out, nrow=nout, byrow=TRUE)
 		out$phi01 <- matrix(C.out$phi01.out, nrow=nout, byrow=TRUE)
 		out$tau21 <- matrix(C.out$tau21.out, nrow=nout, byrow=TRUE)
 		out$tau22 <- matrix(C.out$tau22.out, nrow=nout, byrow=TRUE)
-		if(model==2) out$gamma <- matrix(C.out$gamma.out, nrow=nout, byrow=TRUE)
+		if(model==2|model==3) out$gamma <- matrix(C.out$gamma.out, nrow=nout, byrow=TRUE)
 		out$lpml <- C.out$lpml.out
 		out$waic <- C.out$waic.out
 
@@ -296,8 +296,10 @@ tdVA <- function(y1,xmat1,y2,xmat2,school1,school2,groupID=NULL,model=0,
 			}
 
 			for(j in 1: nschool){
-				VA2.draws[,j] <- out$alpha2[,j] - c(out$phi02[,groupIDt[j]]) - c(out$gamma[,groupIDt[j]])*c(out$phi01) -
-				                                  mcmcSUM[,j]
+				VA2.draws[,j] <- out$alpha2[,j] -
+				                 c(out$phi02[,groupIDt[j]]) -
+				                 c(out$gamma[,groupIDt[j]])*c(out$phi01) -
+				                 mcmcSUM[,j]
 			}
 
 			out$VA2.draws <- VA2.draws
@@ -306,6 +308,34 @@ tdVA <- function(y1,xmat1,y2,xmat2,school1,school2,groupID=NULL,model=0,
 
 		}
 
+
+		if(model==3){
+
+		  mcmcSUM <- matrix(0,nout, nschool)
+		  for(k in 1:ncol(xmat1)){
+		    X1i.mn <- cbind(tapply(xmat1[,k],school1,mean))
+		    X2i.mn <- cbind(tapply(xmat2[,k],school2,mean))
+		    EX1igivenX2i <- lm(X1i.mn ~ X2i.mn)$fitted
+		    for(j in 1: nschool){
+		      mcmcSUM[,j] <- mcmcSUM[,j] + (out$gamma[,groupIDt[j]])*out$beta1[,k]*EX1igivenX2i[j]
+		    }
+
+
+		  }
+
+		  for(j in 1: nschool){
+		    VA2.draws[,j] <- out$alpha2[,j] -
+		                     c(out$phi02[,groupIDt[j]]) -
+		                     c(out$phi01)*(c(out$phi12[,groupIDt[j]]) +
+		                                   c(out$gamma[,groupIDt[j]])) -
+		                     mcmcSUM[,j]
+		  }
+
+		  out$VA2.draws <- VA2.draws
+		  out$VA2.estimate <- apply(out$VA2.draws,2,mean)
+		  out$VA2.intervals <- apply(out$VA2.draws,2,emp.hpd)
+
+		}
 
 
 		mcmc_out[[cc]] <- out
